@@ -1,12 +1,13 @@
 import cls from './MyButton.module.scss'
 
 interface IMyButtonProps {
-  children: string
+  children: React.ReactNode
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
-export const MyButton = ({ children, ...props }: IMyButtonProps) => {
+export const MyButton = ({ children, onClick }: IMyButtonProps) => {
   return (
-    <button {...props} className={cls.myButton}>
+    <button onClick={onClick} className={cls.myButton}>
       {children}
     </button>
   )

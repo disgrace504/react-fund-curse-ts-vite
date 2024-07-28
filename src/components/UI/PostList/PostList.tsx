@@ -10,8 +10,8 @@ export const PostList = ({ posts, title }: IPostListProps) => {
   return (
     <div>
       <h1 className={cls.appTitle}>{title}</h1>
-      {posts.map((post) => (
-        <PostItem key={post.id} post={post} />
+      {posts.map((post, index: number) => (
+        <PostItem postNumber={index + 1} key={post.id} post={post} />
       ))}
     </div>
   )

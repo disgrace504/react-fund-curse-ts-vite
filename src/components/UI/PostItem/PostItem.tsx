@@ -8,17 +8,18 @@ export interface IPost {
 
 interface IPostItemProps {
   post: IPost
+  postNumber: number
 }
 
-export const PostItem = ({ post }: IPostItemProps) => {
-  const { id, title, body } = post
+export const PostItem = ({ post, postNumber }: IPostItemProps) => {
+  const { title, body } = post
   return (
     <div className={cls.post}>
       <div className={cls.postContent}>
-        <p className={cls.postTitle}>{id + '. ' + title}</p>
+        <p className={cls.postTitle}>{`${postNumber}. ${title}`}</p>
         <div>{body}</div>
       </div>
-      <div className='postButtons'>
+      <div className='postButton'>
         <button>Удалить</button>
       </div>
     </div>
