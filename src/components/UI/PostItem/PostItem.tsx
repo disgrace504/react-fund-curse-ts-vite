@@ -1,7 +1,8 @@
+import { MyButton } from '../button/MyButton'
 import cls from './PostItem.module.scss'
 
 export interface IPost {
-  id: number
+  id?: number
   title: string
   body: string
 }
@@ -9,9 +10,10 @@ export interface IPost {
 interface IPostItemProps {
   post: IPost
   postNumber: number
+  removePost: (newPost: IPost) => void
 }
 
-export const PostItem = ({ post, postNumber }: IPostItemProps) => {
+export const PostItem = ({ post, postNumber, removePost }: IPostItemProps) => {
   const { title, body } = post
   return (
     <div className={cls.post}>
@@ -20,7 +22,7 @@ export const PostItem = ({ post, postNumber }: IPostItemProps) => {
         <div>{body}</div>
       </div>
       <div className='postButton'>
-        <button>Удалить</button>
+        <MyButton onClick={() => removePost(post)}>Удалить</MyButton>
       </div>
     </div>
   )

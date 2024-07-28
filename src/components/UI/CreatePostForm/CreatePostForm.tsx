@@ -4,19 +4,16 @@ import { MyButton } from '../button/MyButton'
 import { IPost } from '../PostItem/PostItem'
 
 interface ICreatePostFormProps {
-  posts: IPost[]
-  setPosts: (posts: IPost[]) => void
+  createNewPost: (newPost: IPost) => void
 }
 
-export const CreatePostForm = ({ posts, setPosts }: ICreatePostFormProps) => {
+export const CreatePostForm = ({ createNewPost }: ICreatePostFormProps) => {
   const [newPost, setNewPost] = useState({ title: '', body: '' })
 
-  const addNewPost = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const onAddNewPost = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    const updatedPosts = [...posts, { ...newPost, id: posts.length }]
-
-    setPosts(updatedPosts)
+    createNewPost(newPost)
 
     setNewPost({ title: '', body: '' })
   }
@@ -35,7 +32,7 @@ export const CreatePostForm = ({ posts, setPosts }: ICreatePostFormProps) => {
         placeholder='Описание поста'
         type='text'
       />
-      <MyButton onClick={addNewPost}>Создать пост</MyButton>
+      <MyButton onClick={onAddNewPost}>Создать пост</MyButton>
     </form>
   )
 }
