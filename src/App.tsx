@@ -1,9 +1,9 @@
-import './styles/App.css'
+import './styles/App.scss'
 import { useState } from 'react'
-import { PostList } from './components/PostList'
 import { MyButton } from './components/UI/button/MyButton'
+import { PostList } from './components/UI/PostList/PostList'
 
-export const App: React.FC = () => {
+export const App = () => {
   const [posts, setPosts] = useState([
     { id: 1, title: 'JavaScript 1', body: 'Description' },
     { id: 2, title: 'JavaScript 2', body: 'Description' },

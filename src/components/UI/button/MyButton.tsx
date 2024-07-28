@@ -1,11 +1,10 @@
-import { FC } from 'react'
-import cls from './MyButton.module.css'
+import cls from './MyButton.module.scss'
 
-interface MyButtonProps {
+interface IMyButtonProps {
   children: string
 }
 
-export const MyButton: FC<MyButtonProps> = ({ children, ...props }) => {
+export const MyButton = ({ children, ...props }: IMyButtonProps) => {
   return (
     <button {...props} className={cls.myButton}>
       {children}
