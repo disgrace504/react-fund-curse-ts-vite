@@ -4,6 +4,8 @@ import { PostList } from './components/UI/PostList/PostList'
 import { CreatePostForm } from './components/UI/CreatePostForm/CreatePostForm'
 import { IPost } from './components/UI/PostItem/PostItem'
 import { PostsFilter } from './components/UI/PostsFilter/PostsFilter'
+import { MyModal } from './components/UI/modal/MyModal'
+import { MyButton } from './components/UI/button/MyButton'
 
 type SortByKey = keyof IPost
 
@@ -16,6 +18,7 @@ export const App = () => {
   ])
 
   const [filter, setFilter] = useState({ sortBy: '', searchQuery: '' })
+  const [modalVisible, setModalVisible] = useState(false)
 
   const sortedPosts = useMemo(() => {
     const sortBy = filter.sortBy as SortByKey
@@ -35,6 +38,7 @@ export const App = () => {
   const onCreateNewPost = useCallback(
     (newPost: IPost) => {
       setPosts([...posts, { ...newPost, id: posts.length }])
+      setModalVisible(false)
     },
     [posts]
   )
@@ -49,8 +53,12 @@ export const App = () => {
   return (
     <>
       <div className={cls.App}>
-        <CreatePostForm onCreateNewPost={onCreateNewPost} />
-
+        <MyButton buttonClasses={cls.createPostButton} onClick={() => setModalVisible(true)}>
+          Создать пост
+        </MyButton>
+        <MyModal modalVisible={modalVisible} setModalVisible={setModalVisible}>
+          <CreatePostForm onCreateNewPost={onCreateNewPost} />
+        </MyModal>
         <PostsFilter filter={filter} setFilter={setFilter} />
 
         <PostList removePost={removePost} posts={sortedAndSearchedPosts} title={'Список постов'} />
