@@ -1,19 +1,19 @@
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import { MyInput } from '../input/MyInput'
 import { MyButton } from '../button/MyButton'
 import { IPost } from '../PostItem/PostItem'
 
 interface ICreatePostFormProps {
-  createNewPost: (newPost: IPost) => void
+  onCreateNewPost: (newPost: IPost) => void
 }
 
-export const CreatePostForm = ({ createNewPost }: ICreatePostFormProps) => {
+export const CreatePostForm = memo(({ onCreateNewPost }: ICreatePostFormProps) => {
   const [newPost, setNewPost] = useState({ title: '', body: '' })
 
   const onAddNewPost = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    createNewPost(newPost)
+    onCreateNewPost(newPost)
 
     setNewPost({ title: '', body: '' })
   }
@@ -35,4 +35,4 @@ export const CreatePostForm = ({ createNewPost }: ICreatePostFormProps) => {
       <MyButton onClick={onAddNewPost}>Создать пост</MyButton>
     </form>
   )
-}
+})

@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import cls from './MyInput.module.scss'
 
 interface IMyInputProps {
@@ -7,6 +8,6 @@ interface IMyInputProps {
   value: string
 }
 
-export const MyInput = ({ type, placeholder, onChange, value }: IMyInputProps) => {
+export const MyInput = memo(({ type, placeholder, onChange, value }: IMyInputProps) => {
   return <input value={value} onChange={onChange} type={type} placeholder={placeholder} className={cls.myInput} />
-}
+})

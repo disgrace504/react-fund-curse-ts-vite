@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import cls from './MyButton.module.scss'
 
 interface IMyButtonProps {
@@ -5,10 +6,10 @@ interface IMyButtonProps {
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
-export const MyButton = ({ children, onClick }: IMyButtonProps) => {
+export const MyButton = memo(({ children, onClick }: IMyButtonProps) => {
   return (
     <button onClick={onClick} className={cls.myButton}>
       {children}
     </button>
   )
-}
+})

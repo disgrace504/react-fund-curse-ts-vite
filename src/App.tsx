@@ -1,30 +1,59 @@
-import './styles/App.scss'
-import { useState } from 'react'
+import cls from './App.module.scss'
+import { useCallback, useMemo, useState } from 'react'
 import { PostList } from './components/UI/PostList/PostList'
 import { CreatePostForm } from './components/UI/CreatePostForm/CreatePostForm'
 import { IPost } from './components/UI/PostItem/PostItem'
+import { PostsFilter } from './components/UI/PostsFilter/PostsFilter'
+
+type SortByKey = keyof IPost
 
 export const App = () => {
-  const [posts, setPosts] = useState([
+  const [posts, setPosts] = useState<IPost[]>([
     { id: 0, title: 'JavaScript 1', body: 'Description' },
     { id: 1, title: 'JavaScript 2', body: 'Description' },
     { id: 2, title: 'JavaScript 3', body: 'Description' },
     { id: 3, title: 'JavaScript 4', body: 'Description' },
   ])
 
-  const createNewPost = (newPost: IPost) => {
-    setPosts([...posts, { ...newPost, id: posts.length }])
-  }
+  const [filter, setFilter] = useState({ sortBy: '', searchQuery: '' })
 
-  const removePost = (post: IPost) => {
-    setPosts(posts.filter((postItem) => postItem.id !== post.id))
-  }
+  const sortedPosts = useMemo(() => {
+    const sortBy = filter.sortBy as SortByKey
+    return sortBy
+      ? [...posts].sort((a, b) => {
+          const aValue = a[sortBy] as string
+          const bValue = b[sortBy] as string
+          return aValue.localeCompare(bValue)
+        })
+      : posts
+  }, [filter.sortBy, posts])
+
+  const sortedAndSearchedPosts = useMemo(() => {
+    return sortedPosts.filter((post) => post.title.toLowerCase().includes(filter.searchQuery.toLowerCase()))
+  }, [sortedPosts, filter.searchQuery])
+
+  const onCreateNewPost = useCallback(
+    (newPost: IPost) => {
+      setPosts([...posts, { ...newPost, id: posts.length }])
+    },
+    [posts]
+  )
+
+  const removePost = useCallback(
+    (post: IPost) => {
+      setPosts(posts.filter((postItem) => postItem.id !== post.id))
+    },
+    [posts]
+  )
 
   return (
     <>
-      <div className='App'>
-        <CreatePostForm createNewPost={createNewPost} />
-        <PostList removePost={removePost} posts={posts} title={'Список постов'} />
+      <div className={cls.App}>
+        <CreatePostForm onCreateNewPost={onCreateNewPost} />
+
+        <PostsFilter filter={filter} setFilter={setFilter} />
+
+        <PostList removePost={removePost} posts={sortedAndSearchedPosts} title={'Список постов'} />
       </div>
     </>
   )
