@@ -1,15 +1,14 @@
 import cls from './App.module.scss'
-import { useCallback, useMemo, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { PostList } from './components/UI/PostList/PostList'
 import { CreatePostForm } from './components/UI/CreatePostForm/CreatePostForm'
 import { IPost } from './components/UI/PostItem/PostItem'
 import { PostsFilter } from './components/UI/PostsFilter/PostsFilter'
 import { MyModal } from './components/UI/modal/MyModal'
 import { MyButton } from './components/UI/button/MyButton'
+import { usePosts } from './hooks/usePosts'
 
-type SortByKey = keyof IPost
-
-export const App = () => {
+export const App = memo(() => {
   const [posts, setPosts] = useState<IPost[]>([
     { id: 0, title: 'JavaScript 1', body: 'Description' },
     { id: 1, title: 'JavaScript 2', body: 'Description' },
@@ -19,21 +18,7 @@ export const App = () => {
 
   const [filter, setFilter] = useState({ sortBy: '', searchQuery: '' })
   const [modalVisible, setModalVisible] = useState(false)
-
-  const sortedPosts = useMemo(() => {
-    const sortBy = filter.sortBy as SortByKey
-    return sortBy
-      ? [...posts].sort((a, b) => {
-          const aValue = a[sortBy] as string
-          const bValue = b[sortBy] as string
-          return aValue.localeCompare(bValue)
-        })
-      : posts
-  }, [filter.sortBy, posts])
-
-  const sortedAndSearchedPosts = useMemo(() => {
-    return sortedPosts.filter((post) => post.title.toLowerCase().includes(filter.searchQuery.toLowerCase()))
-  }, [sortedPosts, filter.searchQuery])
+  const sortedAndSearchedPosts = usePosts(posts, filter.sortBy, filter.searchQuery)
 
   const onCreateNewPost = useCallback(
     (newPost: IPost) => {
@@ -65,4 +50,4 @@ export const App = () => {
       </div>
     </>
   )
-}
+})

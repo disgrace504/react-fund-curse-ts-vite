@@ -15,7 +15,7 @@ export const PostList = memo(({ posts, title, removePost }: IPostListProps) => {
         <>
           <h1 className={cls.appTitle}>{title}</h1>
           {posts.map((post, index: number) => (
-            <PostItem posts={posts} removePost={removePost} postNumber={index + 1} key={post.id} post={post} />
+            <PostItem removePost={removePost} postNumber={index + 1} key={post.id} post={post} />
           ))}
         </>
       ) : (

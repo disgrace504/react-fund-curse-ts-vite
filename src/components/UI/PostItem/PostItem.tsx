@@ -10,16 +10,15 @@ export interface IPost {
 
 interface IPostItemProps {
   post: IPost
-  posts: IPost[]
   postNumber: number
   removePost: (newPost: IPost) => void
 }
 
-export const PostItem = memo(({ posts, post, postNumber, removePost }: IPostItemProps) => {
+export const PostItem = memo(({ post, postNumber, removePost }: IPostItemProps) => {
   const { title, body } = post
   const onRemovePost = useCallback(() => {
     removePost(post)
-  }, [posts])
+  }, [post, removePost])
   return (
     <div className={cls.post}>
       <div className={cls.postContent}>
