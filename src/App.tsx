@@ -11,24 +11,32 @@ import { usePosts } from './hooks/usePosts'
 import { Loader } from './components/UI/Loader/Loader'
 import { getPosts } from './components/API/PostService'
 import { useFetching } from './hooks/useFetching'
+import { getPageCount, getPagesArray } from './utils/pages'
+import { Pagination } from './components/UI/pagination/Pagination'
 
 const postsUrl = import.meta.env.VITE_POSTS_URL
 
 export const App = memo(() => {
   const [posts, setPosts] = useState<IPost[]>([])
-
   const [filter, setFilter] = useState({ sortBy: '', searchQuery: '' })
   const [modalVisible, setModalVisible] = useState(false)
+  const [totalPages, setTotalPages] = useState(0)
+  const [postsLimit, setPostsLimit] = useState(10)
+  const [currentPage, setCurrentPage] = useState(1)
 
   const sortedAndSearchedPosts = usePosts(posts, filter.sortBy, filter.searchQuery)
 
-  const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
-    const data = await getPosts(postsUrl)
-    setPosts(data)
+  const pagesArray = getPagesArray(totalPages)
+
+  const [fetchPosts, isPostsLoading, postError] = useFetching(async (postsLimit, page) => {
+    const response = await getPosts(postsUrl, (postsLimit = 10), page)
+    setPosts(response.data)
+    const totalPostsCount = response.headers['x-total-count']
+    setTotalPages(getPageCount(totalPostsCount, postsLimit))
   })
 
   useEffect(() => {
-    fetchPosts()
+    fetchPosts(postsLimit, currentPage)
   }, [])
 
   const onCreateNewPost = useCallback(
@@ -44,6 +52,14 @@ export const App = memo(() => {
       setPosts(posts.filter((postItem) => postItem.id !== post.id))
     },
     [posts]
+  )
+
+  const onChangePage = useCallback(
+    (pageNumber: number) => {
+      setCurrentPage(pageNumber)
+      fetchPosts(pageNumber)
+    },
+    [fetchPosts]
   )
 
   return (
@@ -63,6 +79,9 @@ export const App = memo(() => {
           </div>
         ) : (
           <PostList removePost={removePost} posts={sortedAndSearchedPosts} title={'Список постов'} />
+        )}
+        {!isPostsLoading && (
+          <Pagination totalPages={pagesArray} currentPage={currentPage} onChangePage={onChangePage} />
         )}
       </div>
     </>
