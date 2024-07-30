@@ -1,10 +1,6 @@
 import axios from 'axios'
 
-export const getPosts = async (postsUrl: string) => {
-  try {
-    const response = await axios.get(postsUrl)
-    return response.data
-  } catch (error) {
-    console.log('Ошибка ответа сервера: ', error)
-  }
+export const getPosts = async (url: string) => {
+  const response = await axios.get(url)
+  return response.data
 }

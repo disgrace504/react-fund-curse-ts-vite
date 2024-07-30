@@ -7,8 +7,11 @@ import { PostsFilter } from './components/UI/PostsFilter/PostsFilter'
 import { MyModal } from './components/UI/modal/MyModal'
 import { MyButton } from './components/UI/button/MyButton'
 import { usePosts } from './hooks/usePosts'
-import { getPosts } from './components/API/PostService'
+
 import { Loader } from './components/UI/Loader/Loader'
+import { getPosts } from './components/API/PostService'
+import { useFetching } from './hooks/useFetching'
+
 const postsUrl = import.meta.env.VITE_POSTS_URL
 
 export const App = memo(() => {
@@ -16,16 +19,15 @@ export const App = memo(() => {
 
   const [filter, setFilter] = useState({ sortBy: '', searchQuery: '' })
   const [modalVisible, setModalVisible] = useState(false)
-  const [isPostLoading, setIsPostLoading] = useState(false)
+
   const sortedAndSearchedPosts = usePosts(posts, filter.sortBy, filter.searchQuery)
 
+  const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
+    const data = await getPosts(postsUrl)
+    setPosts(data)
+  })
+
   useEffect(() => {
-    const fetchPosts = async () => {
-      setIsPostLoading(true)
-      const data = await getPosts(postsUrl)
-      setPosts(data)
-      setIsPostLoading(false)
-    }
     fetchPosts()
   }, [])
 
@@ -54,7 +56,8 @@ export const App = memo(() => {
           <CreatePostForm onCreateNewPost={onCreateNewPost} />
         </MyModal>
         <PostsFilter filter={filter} setFilter={setFilter} />
-        {isPostLoading ? (
+        {postError && <h1>{`Произошла ошибка ${postError}`}</h1>}
+        {isPostsLoading ? (
           <div className={cls.postLoader}>
             <Loader />
           </div>
