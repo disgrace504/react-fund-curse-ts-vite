@@ -1,5 +1,5 @@
 import cls from './App.module.scss'
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { PostList } from './components/UI/PostList/PostList'
 import { CreatePostForm } from './components/UI/CreatePostForm/CreatePostForm'
 import { IPost } from './components/UI/PostItem/PostItem'
@@ -7,18 +7,27 @@ import { PostsFilter } from './components/UI/PostsFilter/PostsFilter'
 import { MyModal } from './components/UI/modal/MyModal'
 import { MyButton } from './components/UI/button/MyButton'
 import { usePosts } from './hooks/usePosts'
+import { getPosts } from './components/API/PostService'
+import { Loader } from './components/UI/Loader/Loader'
+const postsUrl = import.meta.env.VITE_POSTS_URL
 
 export const App = memo(() => {
-  const [posts, setPosts] = useState<IPost[]>([
-    { id: 0, title: 'JavaScript 1', body: 'Description' },
-    { id: 1, title: 'JavaScript 2', body: 'Description' },
-    { id: 2, title: 'JavaScript 3', body: 'Description' },
-    { id: 3, title: 'JavaScript 4', body: 'Description' },
-  ])
+  const [posts, setPosts] = useState<IPost[]>([])
 
   const [filter, setFilter] = useState({ sortBy: '', searchQuery: '' })
   const [modalVisible, setModalVisible] = useState(false)
+  const [isPostLoading, setIsPostLoading] = useState(false)
   const sortedAndSearchedPosts = usePosts(posts, filter.sortBy, filter.searchQuery)
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      setIsPostLoading(true)
+      const data = await getPosts(postsUrl)
+      setPosts(data)
+      setIsPostLoading(false)
+    }
+    fetchPosts()
+  }, [])
 
   const onCreateNewPost = useCallback(
     (newPost: IPost) => {
@@ -45,8 +54,13 @@ export const App = memo(() => {
           <CreatePostForm onCreateNewPost={onCreateNewPost} />
         </MyModal>
         <PostsFilter filter={filter} setFilter={setFilter} />
-
-        <PostList removePost={removePost} posts={sortedAndSearchedPosts} title={'Список постов'} />
+        {isPostLoading ? (
+          <div className={cls.postLoader}>
+            <Loader />
+          </div>
+        ) : (
+          <PostList removePost={removePost} posts={sortedAndSearchedPosts} title={'Список постов'} />
+        )}
       </div>
     </>
   )
