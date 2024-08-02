@@ -1,3 +1,4 @@
+import axios, { AxiosError } from 'axios'
 import { useState } from 'react'
 
 export const useFetching = (callback: (...args: any) => Promise<any>) => {
@@ -8,8 +9,11 @@ export const useFetching = (callback: (...args: any) => Promise<any>) => {
     try {
       setIsLoading(true)
       await callback(...args)
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err) {
+      const errors = err as Error | AxiosError
+      if (!axios.isAxiosError(error)) {
+        setError(errors.message)
+      }
     } finally {
       setIsLoading(false)
     }
