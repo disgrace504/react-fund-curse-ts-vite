@@ -6,3 +6,15 @@ export const getPosts = async (url: string, limit = 10, page = 1) => {
   })
   return response
 }
+
+export const getPostsById = async (url: string, postId: string) => {
+  const response = await axios.get(url + postId)
+
+  return response
+}
+
+export const getCommentsById = async (url: string, postId: string) => {
+  const response = await axios.get(url + postId + '/comments')
+
+  return response
+}

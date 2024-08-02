@@ -5,6 +5,15 @@
   margin-top: 15px;
   justify-content: space-between;
   align-items: center;
+  .postButtons {
+    margin-right: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    .postButton {
+      margin: 2px;
+    }
+  }
 }
 .postTitle {
   font-weight: bold;

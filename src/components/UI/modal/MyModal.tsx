@@ -19,7 +19,7 @@ export const MyModal = memo(({ children, modalVisible, setModalVisible }: IMyMod
     <div className={rootClasses.join(' ')} onClick={() => setModalVisible(false)}>
       <div className={cls.myModalContent} onClick={(event) => event.stopPropagation()}>
         {children}
-        <MyButton buttonClasses={cls.closeButton} onClick={() => setModalVisible(false)}>
+        <MyButton className={cls.closeButton} onClick={() => setModalVisible(false)}>
           Закрыть
         </MyButton>
       </div>

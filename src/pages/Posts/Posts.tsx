@@ -28,7 +28,7 @@ export const Posts = memo(() => {
   const pagesArray = getPagesArray(totalPages)
 
   const [fetchPosts, isPostsLoading, postError] = useFetching(async (postsLimit, page) => {
-    const response = await getPosts(postsUrl, (postsLimit = 10), page)
+    const response = await getPosts(postsUrl, postsLimit, page)
     setPosts(response.data)
 
     const totalPostsCount = response.headers['x-total-count']
@@ -57,7 +57,7 @@ export const Posts = memo(() => {
   const onChangePage = useCallback(
     (pageNumber: number) => {
       setCurrentPage(pageNumber)
-      fetchPosts(pageNumber)
+      fetchPosts(postsLimit, pageNumber)
     },
 
     [fetchPosts]
@@ -65,7 +65,7 @@ export const Posts = memo(() => {
 
   return (
     <>
-      <MyButton buttonClasses={cls.createPostButton} onClick={() => setModalVisible(true)}>
+      <MyButton className={cls.createPostButton} onClick={() => setModalVisible(true)}>
         Создать пост
       </MyButton>
       <MyModal modalVisible={modalVisible} setModalVisible={setModalVisible}>

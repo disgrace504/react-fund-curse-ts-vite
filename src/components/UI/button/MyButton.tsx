@@ -2,15 +2,15 @@ import { memo } from 'react'
 import cls from './MyButton.module.scss'
 
 interface IMyButtonProps {
-  buttonClasses?: string
+  className?: string
   children: React.ReactNode
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
-export const MyButton = memo(({ children, onClick, buttonClasses }: IMyButtonProps) => {
+export const MyButton = memo(({ children, onClick, className }: IMyButtonProps) => {
   const rootStyles = [cls.myButton]
-  if (buttonClasses) {
-    rootStyles.push(buttonClasses)
+  if (className) {
+    rootStyles.push(className)
   }
 
   return (
