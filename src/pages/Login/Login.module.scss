@@ -1,0 +1,12 @@
+.loginContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
+  .loginTitle {
+    margin-bottom: 5px;
+  }
+  .loginButton {
+    margin-top: 5px;
+  }
+}

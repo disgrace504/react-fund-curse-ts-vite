@@ -1,24 +1,27 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { Posts } from '../../../pages/Posts/Posts'
-import { About } from '../../../pages/About/About'
-import { Error } from '../../../pages/Error/Error'
 import cls from './AppRouter.module.scss'
-import { CurrentPostPage } from '../../../pages/CurrentPostPage/CurrentPostPage'
+import { privateRoutes, publicRoutes } from '../../../router/router'
 
 export const AppRouter = () => {
+  const isAuthorized = false
+
   return (
     <div className={cls.appContent}>
-      <Routes>
-        <Route path='/posts' element={<Posts />} />
-
-        <Route path='/about' element={<About />} />
-
-        <Route path='/error' element={<Error />} />
-
-        <Route path='/posts/:id' element={<CurrentPostPage />} />
-
-        <Route path='*' element={<Navigate to='/error' />} />
-      </Routes>
+      {isAuthorized ? (
+        <Routes>
+          {privateRoutes.map((route, index) => (
+            <Route key={index} path={route.path} element={<route.component />} />
+          ))}
+          <Route path='*' element={<Navigate to='/posts' />} />
+        </Routes>
+      ) : (
+        <Routes>
+          {publicRoutes.map((route, index) => (
+            <Route key={index} path={route.path} element={<route.component />} />
+          ))}
+          <Route path='*' element={<Navigate to='/login' />} />
+        </Routes>
+      )}
     </div>
   )
 }
