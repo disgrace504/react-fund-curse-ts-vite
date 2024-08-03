@@ -1,9 +1,16 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import cls from './AppRouter.module.scss'
 import { privateRoutes, publicRoutes } from '../../../router/router'
+import { useContext } from 'react'
+import { AuthContext } from '../../../context/context'
+import { Loader } from '../Loader/Loader'
 
 export const AppRouter = () => {
-  const isAuthorized = false
+  const { isAuthorized, isAuthorizedLoading } = useContext(AuthContext)
+
+  if (isAuthorizedLoading) {
+    return <Loader />
+  }
 
   return (
     <div className={cls.appContent}>

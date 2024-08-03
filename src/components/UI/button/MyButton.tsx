@@ -4,7 +4,7 @@ import cls from './MyButton.module.scss'
 interface IMyButtonProps {
   className?: string
   children: React.ReactNode
-  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 export const MyButton = memo(({ children, onClick, className }: IMyButtonProps) => {

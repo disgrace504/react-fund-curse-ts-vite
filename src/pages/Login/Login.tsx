@@ -1,21 +1,25 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { MyInput } from './../../components/UI/input/MyInput'
 import { MyButton } from './../../components/UI/button/MyButton'
 import cls from './Login.module.scss'
+import { AuthContext } from '../../context/context'
 
 export const Login = () => {
+  const { setIsAuthorized } = useContext(AuthContext)
+
   const [loginValue, setLoginValue] = useState('')
   const [passwordValue, setPasswordValue] = useState('')
 
-  const onClickLogin = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const login = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    console.log(loginValue, passwordValue)
+    setIsAuthorized(true)
+    localStorage.setItem('isAuthorized', 'true')
   }
 
   return (
     <div className={cls.loginContent}>
       <h1 className={cls.loginTitle}>Страница для логина</h1>
-      <form action=''>
+      <form onSubmit={login}>
         <MyInput
           type='text'
           placeholder='Ведите логин'
@@ -26,9 +30,7 @@ export const Login = () => {
           placeholder='Ведите пароль'
           value={passwordValue}
           onChange={(event) => setPasswordValue(event.target.value)}></MyInput>
-        <MyButton className={cls.loginButton} onClick={onClickLogin}>
-          Войти
-        </MyButton>
+        <MyButton className={cls.loginButton}>Войти</MyButton>
       </form>
     </div>
   )
