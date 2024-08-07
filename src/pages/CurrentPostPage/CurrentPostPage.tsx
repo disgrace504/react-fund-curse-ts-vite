@@ -16,6 +16,7 @@ interface IComment {
 }
 
 export const CurrentPostPage = () => {
+  const navigate = useNavigate()
   const { id } = useParams()
   const [currentPost, setCurrentPost] = useState<IPost | null>(null)
   const [comments, setComments] = useState<IComment[]>([])
@@ -29,8 +30,6 @@ export const CurrentPostPage = () => {
     const response = await getCommentsById(currenPostUrl, id)
     setComments(response.data)
   })
-
-  const navigate = useNavigate()
 
   useEffect(() => {
     fetchPostById(id)
